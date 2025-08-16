@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+               checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'git-login', url: 'https://github.com/ajibeng/ibt-maven.git']])
+            }
+        }
+        stage('Maven Validate') {
+            steps {
+                withMaven(maven: 'maven_3.9') {
+                    sh 'mvn validate'
+                }
+            }
+        }
+        stage('Maven Compile') {
+            steps {
+               withMaven(maven: 'maven_3.9') {
+                   sh 'mvn compile'
+               }
+            }
+        }
+        stage('Run test') {
+                   steps {
+                      withMaven(maven: 'maven_3.9') {
+                          sh 'mvn test'
+                      }
+                   }
+               }
+    }
+}
