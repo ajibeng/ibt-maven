@@ -12,9 +12,9 @@ pipeline {
                 echo 'Hi World'
             }
         }
-        stage('hook test') {
+        stage('github-webhook test') {
                     steps {
-                        echo 'testing hook'
+                        echo 'testing the hook'
                     }
                 }
         stage('Hallo') {
